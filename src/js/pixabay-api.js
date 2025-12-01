@@ -8,20 +8,23 @@ const DEFAULT_PARAMS = {
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
-  per_page: 40,
+  per_page: 15,
 };
 
 
 
 
-export function getImagesByQuery(query) {
-  return axios
-    .get(BASE_URL, {
-      params: { ...DEFAULT_PARAMS, q: query },
-    })
-    .then(response => response.data)
-    .catch(error => {
-      console.error('Помилка запиту до Pixabay:', error);
-      throw error;
-    });
+export async function getImagesByQuery(query, page = 1) {
+  try {
+    const params = {
+      ...DEFAULT_PARAMS,
+      q: query,
+      page,
+    };
+
+    const response = await axios.get(BASE_URL, { params });
+    return response.data;
+  } catch (error) {
+       throw error;
+  }
 }

@@ -60,7 +60,6 @@ async function onSearch(e) {
 
     totalHits = data.totalHits;
 
-    // додаємо першу порцію
     createGallery(data.hits);
 
     iziToast.success({
@@ -87,7 +86,6 @@ async function onSearch(e) {
     hideLoader();
   }
 }
-
 async function onLoadMore() {
   hideLoadMoreButton();
   showLoader();
@@ -98,44 +96,29 @@ async function onLoadMore() {
     const data = await getImagesByQuery(currentQuery, currentPage);
 
     if (!data || !Array.isArray(data.hits) || data.hits.length === 0) {
-        iziToast.info({
-        title: 'Info',
-        message: "We're sorry, but you've reached the end of search results.",
-        position: 'topRight',
-      });
       hideLoadMoreButton();
       return;
     }
 
     createGallery(data.hits);
-
     scrollAfterLoad();
 
     const perPage = 15;
-    const loadedSoFar = currentPage * perPage;
-    if (loadedSoFar >= totalHits) {
-      iziToast.info({
-        title: 'Info',
-        message: "We're sorry, but you've reached the end of search results.",
-        position: 'topRight',
-      });
+
+    if (data.hits.length < perPage) {
       hideLoadMoreButton();
     } else {
       showLoadMoreButton();
     }
+
   } catch (error) {
     console.error(error);
-    iziToast.error({
-      title: 'Error',
-      message:
-        'Something went wrong while fetching more images. Please try again later.',
-      position: 'topRight',
-    });
-       showLoadMoreButton();
+    showLoadMoreButton(); 
   } finally {
     hideLoader();
   }
 }
+
 
 function scrollAfterLoad() {
   const galleryEl = getGalleryElement();

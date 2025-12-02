@@ -30,3 +30,7 @@
   background: #fff;
   font-size: 14px;
 }
+
+.is-hidden {
+  display: none !important;
+}
